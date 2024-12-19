@@ -28,8 +28,16 @@ file home_page.dart as file_home_page_dart{
             }
 
             component BottomNavigationBar\n底部导航栏 as BottomNavigationBar_W{
-                [BarItem\n消息] as BarItem_Message_W
-                [BarItem\n通讯录] as BarItem_Contact_W
+                component BarItem\n消息 as BarItem_Message_W{
+                    component TIMUIKitConversationTotalUnread\n会话未读总数 as BottomNavigationBa_TIMUIKitConversationTotalUnread_W{
+                        [UnreadMessage\n具体未读数量] as BottomNavigationBa_TIMUIKitConversationTotalUnread_UnreadMessage_W
+                    }
+                }
+                component BarItem\n通讯录 as BarItem_Contact_W{
+                    component TIMUIKitUnreadCount\n未决列表申请未读数 as BottomNavigationBa_TIMUIKitUnreadCount_W{
+                        [UnreadMessage\n具体未读数量] as BottomNavigationBa_TIMUIKitUnreadCount_TIMUIKitUnreadCount_W
+                    }
+                }
                 [BarItem\n我的] as BarItem_MyProfile_W
 
                 BarItem_Message_W .[hidden] BarItem_Contact_W
@@ -51,29 +59,91 @@ file home_page.dart as file_home_page_dart{
                             home_page_TencentPage_Conversation_SearchEntry_desktopWidget_M . home_page_TencentPage_Conversation_SearchEntry_SearchEntryNarrow_W
                         }
                         component TIMUIKitConversation\nUIKIT层会话页 as home_page_TencentPage_Conversation_TIMUIKitConversation_W{
-                            (onTapItem\n会话列表Item点击事件) as home_page_TencentPage_Conversation_TIMUIKitConversation_onTapItem_P
-                            rectangle _handleOnConvItemTaped\n路由跳转 as home_page_TencentPage_Conversation_TIMUIKitConversation__handleOnConvItemTaped_M{
-                                stack 跳转至聊天页面 as route_home_page_2_chat
-                            }
-                            home_page_TencentPage_Conversation_TIMUIKitConversation_onTapItem_P .right. home_page_TencentPage_Conversation_TIMUIKitConversation__handleOnConvItemTaped_M
-                            home_page_TencentPage_Conversation_TIMUIKitConversation_onTapItem_P .right. home_page_TencentPage_Conversation_TIMUIKitConversation__handleOnConvItemTaped_M
+                            component MultiProvider\nTIMUIKitConversation最外层Widget as home_page_TencentPage_Conversation_TIMUIKitConversation_MultiProvider_W{
+                                card TUIKitScreenUtils.getDeviceWidget\n获取设备类型 as home_page_MultiProvider_getDeviceWidget_U{
+                                    (defaultWidget\n默认手机端) as home_page_MultiProvider_defaultWidget_P
+                                    component SlidableAutoCloseBehavior\n避免同时打开多个侧滑菜单 as home_page_getDeviceWidget_SlidableAutoCloseBehavior_W{
+                                        component EasyRefresh\n下拉刷新会话列表 as home_page_SlidableAutoCloseBehavior_EasyRefresh_W{
+                                            [CustomizeBallPulseHeader\n自定义顶部下拉刷新加载动画] as home_page_EasyRefresh_CustomizeBallPulseHeader_W
+                                            component conversationList\n会话列表Widget as home_page_EasyRefresh_conversationList_W{
+                                                component ListView.builder\n列表数据构建器 as home_page_conversationList_ListView.builder_W{
+                                                    card TUIKitScreenUtils.getDeviceWidget\n获取设备类型 as home_page_ListView.builder_getDeviceWidget_U{
+                                                        (defaultWidget\n默认手机端) as home_page_ListView.builder_defaultWidget_P
+                                                        component AutoScrollTag\n拥有滚动到特定索引位置的功能组件 as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag{
+                                                            component Slidable\n支持列表Item增加侧滑功能 as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_Slidable{
+                                                                component conversationLineItem\n会话Item最外层Widget as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_Slidable_conversationLineItem{
+                                                                    component TIMUIKitConversationItem\n会话item as defaultWidget_TIMUIKitConversationItem_W{
+                                                                        [Avatar\n会话Item头像] as home_page_TIMUIKitConversationItem_Avatar_W
+                                                                        [UnreadMessage\n会话Item未读数] as home_page_TIMUIKitConversationItem_UnreadMessage_W
+                                                                        [_getTimeStringForChatWidget\n会话Item时间] as home_page_TIMUIKitConversationItem__getTimeStringForChatWidget_W
+                                                                        component _getShowMsgWidget\n会话ItemLastMessage as home_page_TIMUIKitConversationItem__getShowMsgWidget_W{
+                                                                           (是否需要显示草稿\n（这里有多个参数判断条件）) as home_page__getShowMsgWidget_isShowDraft_P
+                                                                           component TIMUIKitDraftText\n草稿布局 as home_page__getShowMsgWidget_TIMUIKitDraftText_W{
 
-                            (lastMessageBuilder\n lastMessage解析) as home_page_TencentPage_Conversation_TIMUIKitConversation_lastMessageBuilder_P
-                            rectangle 匿名函数 as home_page_TencentPage_Conversation_TIMUIKitConversation_anonymous_M{
-                                (lastMsg.elemType\n消息elem类型) as home_page_TencentPage_Conversation_TIMUIKitConversation_anonymous_elemType_M
-                                [RenderCustomMessage\n自定义消息widget] as home_page_TencentPage_Conversation_TIMUIKitConversation_anonymous_RenderCustomMessage_M
-                                home_page_TencentPage_Conversation_TIMUIKitConversation_anonymous_elemType_M .right. home_page_TencentPage_Conversation_TIMUIKitConversation_anonymous_RenderCustomMessage_M :V2TIM_ELEM_TYPE_CUSTOM
-                            }
-                            home_page_TencentPage_Conversation_TIMUIKitConversation_lastMessageBuilder_P .right. home_page_TencentPage_Conversation_TIMUIKitConversation_anonymous_M
-                            home_page_TencentPage_Conversation_TIMUIKitConversation_lastMessageBuilder_P .right. home_page_TencentPage_Conversation_TIMUIKitConversation_anonymous_M
+                                                                           }
+                                                                           component TIMUIKitLastMsg\n消息详情摘要 as home_page__getShowMsgWidget_TIMUIKitLastMsg_W{
+                                                                                [Icon\n发送失败]
+                                                                                [Icon\n发送中]
+                                                                           }
+                                                                           home_page__getShowMsgWidget_isShowDraft_P .left.> home_page__getShowMsgWidget_TIMUIKitDraftText_W : 是
+                                                                           home_page__getShowMsgWidget_isShowDraft_P .right.> home_page__getShowMsgWidget_TIMUIKitLastMsg_W : 否
+                                                                        }
+                                                                        home_page_TIMUIKitConversationItem__getTimeStringForChatWidget_W ..[hidden] home_page_TIMUIKitConversationItem__getShowMsgWidget_W
+                                                                    }
+                                                                }
+                                                                component ActionPane\n定义Slidable组件在侧滑时展示动作按钮的区域和行为 as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane{
+                                                                    component slideChildren=_getSlideBuilder as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder{
+                                                                        component _defaultSlideBuilder\n默认的侧滑显示扩展功能 as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder{
+                                                                            [ConversationItemSlidePanel\n清除] as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_clean
+                                                                            [ConversationItemSlidePanel\n置顶/取消置顶] as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_pin
+                                                                            [ConversationItemSlidePanel\n删除] as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_delete
 
-                            home_page_TencentPage_Conversation_TIMUIKitConversation_onTapItem_P ..[hidden] home_page_TencentPage_Conversation_TIMUIKitConversation_lastMessageBuilder_P
+                                                                            conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_clean .[hidden] conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_pin
+                                                                            conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_pin .[hidden] conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_delete
+                                                                        }
+                                                                    }
+                                                                                                                            }
+                                                            }
+                                                        }
+
+                                                        home_page_ListView.builder_defaultWidget_P .right. conversationList_getDeviceWidget_defaultWidget_AutoScrollTag
+                                                        home_page_ListView.builder_defaultWidget_P .right. conversationList_getDeviceWidget_defaultWidget_AutoScrollTag
+                                                    }
+                                                }
+                                            }
+                                            home_page_EasyRefresh_CustomizeBallPulseHeader_W ..[hidden] home_page_EasyRefresh_conversationList_W
+                                        }
+                                    }
+
+                                    home_page_MultiProvider_defaultWidget_P .right. home_page_getDeviceWidget_SlidableAutoCloseBehavior_W
+                                    home_page_MultiProvider_defaultWidget_P .right. home_page_getDeviceWidget_SlidableAutoCloseBehavior_W
+
+                                }
+
+
+
+
+
+                                (onTapItem\n会话列表Item点击事件) as home_page_TencentPage_Conversation_TIMUIKitConversation_onTapItem_P
+                                rectangle _handleOnConvItemTaped\n路由跳转 as home_page_TencentPage_Conversation_TIMUIKitConversation__handleOnConvItemTaped_M{
+                                    stack 跳转至聊天页面 as route_home_page_2_chat
+                                }
+                                home_page_TencentPage_Conversation_TIMUIKitConversation_onTapItem_P .right. home_page_TencentPage_Conversation_TIMUIKitConversation__handleOnConvItemTaped_M
+                                home_page_TencentPage_Conversation_TIMUIKitConversation_onTapItem_P .right. home_page_TencentPage_Conversation_TIMUIKitConversation__handleOnConvItemTaped_M
+
+                                (lastMessageBuilder\n lastMessage解析) as home_page_TencentPage_Conversation_TIMUIKitConversation_lastMessageBuilder_P
+                                rectangle 匿名函数 as home_page_TencentPage_Conversation_TIMUIKitConversation_anonymous_M{
+                                    (lastMsg.elemType\n消息elem类型) as home_page_TencentPage_Conversation_TIMUIKitConversation_anonymous_elemType_M
+                                    [RenderCustomMessage\n自定义消息widget] as home_page_TencentPage_Conversation_TIMUIKitConversation_anonymous_RenderCustomMessage_M
+                                    home_page_TencentPage_Conversation_TIMUIKitConversation_anonymous_elemType_M .right. home_page_TencentPage_Conversation_TIMUIKitConversation_anonymous_RenderCustomMessage_M :V2TIM_ELEM_TYPE_CUSTOM
+                                }
+                                home_page_TencentPage_Conversation_TIMUIKitConversation_lastMessageBuilder_P .right. home_page_TencentPage_Conversation_TIMUIKitConversation_anonymous_M
+                                home_page_TencentPage_Conversation_TIMUIKitConversation_lastMessageBuilder_P .right. home_page_TencentPage_Conversation_TIMUIKitConversation_anonymous_M
+
+                                home_page_TencentPage_Conversation_TIMUIKitConversation_onTapItem_P ..[hidden] home_page_TencentPage_Conversation_TIMUIKitConversation_lastMessageBuilder_P
+                            }
                         }
                         home_page_TencentPage_Conversation_SearchEntry_W ..[hidden] home_page_TencentPage_Conversation_TIMUIKitConversation_W
-                    }
-
-                    component TIMUIKitConversationTotalUnread\n会话未读总数 as home_page_TencentPage_body_TIMUIKitConversationTotalUnread_W{
-                        [UnreadMessage\n具体未读数量]
                     }
                 }
 
@@ -102,13 +172,13 @@ file home_page.dart as file_home_page_dart{
                                 stack NewContact\n跳转至新的联系人 as route_home_page_2_newContact{
 
                                 }
-                                stack NewContact\n跳转至我的群聊 as route_home_page_2_group_list{
+                                stack MyGroup\n跳转至我的群聊 as route_home_page_2_group_list{
 
                                 }
-                                stack NewContact\n跳转至黑名单 as route_home_page_2_blackList{
+                                stack BlackList\n跳转至黑名单 as route_home_page_2_blackList{
 
                                 }
-                                stack NewContact\n跳转至智能客服 as route_home_page_2_customerServicePage{
+                                stack CustomerService\n跳转至智能客服 as route_home_page_2_customerServicePage{
 
                                 }
                             }
@@ -179,45 +249,45 @@ file home_page.dart as file_home_page_dart{
     }
 }
 
-file tim_uikit_conversation.dart as tim_uikit_conversation_dart{
-    component "UIKit 会话列表 页面布局结构" as TIMUIKitConversation_W{
-
-        component conversationList\n会话列表 as  tim_uikit_conversation_conversationList{
-
-            card TUIKitScreenUtils.getDeviceWidget\n获取设备类型 as conversationList_getDeviceWidget{
-                (defaultWidget\n默认手机端) as conversationList_getDeviceWidget_defaultWidget
-                component AutoScrollTag as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag{
-                    component Slidable as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_Slidable{
-                        component conversationLineItem as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_Slidable_conversationLineItem{
-                            component TIMUIKitConversationItem\n会话列表item as defaultWidget_TIMUIKitConversationItem_W{
-
-                            }
-                        }
-                    }
-
-                    component ActionPane as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane{
-                        component slideChildren=_getSlideBuilder as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder{
-                            component _defaultSlideBuilder as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder{
-                                [ConversationItemSlidePanel\n清除] as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_clean
-                                [ConversationItemSlidePanel\n置顶/取消置顶] as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_pin
-                                [ConversationItemSlidePanel\n删除] as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_delete
-
-                                conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_clean .[hidden] conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_pin
-                                conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_pin .[hidden] conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_delete
-                            }
-                        }
-                    }
-                }
-
-                conversationList_getDeviceWidget_defaultWidget .right. conversationList_getDeviceWidget_defaultWidget_AutoScrollTag
-                conversationList_getDeviceWidget_defaultWidget .right. conversationList_getDeviceWidget_defaultWidget_AutoScrollTag
-
-            }
-        }
-    }
-}
-
-home_page_TencentPage_Conversation_TIMUIKitConversation_W -- tim_uikit_conversation_dart
-home_page_TencentPage_Conversation_TIMUIKitConversation_W -- tim_uikit_conversation_dart
+'file tim_uikit_conversation.dart as tim_uikit_conversation_dart{
+'    frame "UIKit 会话列表 页面布局结构" as TIMUIKitConversation_W{
+'
+'        component conversationList\n会话列表 as  tim_uikit_conversation_conversationList{
+'
+'            card TUIKitScreenUtils.getDeviceWidget\n获取设备类型 as conversationList_getDeviceWidget{
+'                (defaultWidget\n默认手机端) as conversationList_getDeviceWidget_defaultWidget
+'                component AutoScrollTag as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag{
+'                    component Slidable as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_Slidable{
+'                        component conversationLineItem as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_Slidable_conversationLineItem{
+'                            component TIMUIKitConversationItem\n会话列表item as defaultWidget_TIMUIKitConversationItem_W{
+'
+'                            }
+'                        }
+'                    }
+'
+'                    component ActionPane as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane{
+'                        component slideChildren=_getSlideBuilder as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder{
+'                            component _defaultSlideBuilder as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder{
+'                                [ConversationItemSlidePanel\n清除] as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_clean
+'                                [ConversationItemSlidePanel\n置顶/取消置顶] as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_pin
+'                                [ConversationItemSlidePanel\n删除] as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_delete
+'
+'                                conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_clean .[hidden] conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_pin
+'                                conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_pin .[hidden] conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_delete
+'                            }
+'                        }
+'                    }
+'                }
+'
+'                conversationList_getDeviceWidget_defaultWidget .right. conversationList_getDeviceWidget_defaultWidget_AutoScrollTag
+'                conversationList_getDeviceWidget_defaultWidget .right. conversationList_getDeviceWidget_defaultWidget_AutoScrollTag
+'
+'            }
+'        }
+'    }
+'}
+'
+'home_page_TencentPage_Conversation_TIMUIKitConversation_W ---- tim_uikit_conversation_dart
+'home_page_TencentPage_Conversation_TIMUIKitConversation_W ---- tim_uikit_conversation_dart
 
 @enduml
