@@ -63,8 +63,28 @@ dependencies:
   bitsdojo_window: ^0.1.5
   flutter_datetime_picker_plus: ^2.1.0
   tdesign_flutter: ^0.1.3
-  wakelock_plus: 1.1.4
-  fluttertoast: ">=8.0.0 <8.6.0"
+  wakelock_plus: ^1.2.10
+  fluttertoast: ^8.2.12
+
+dependency_overrides:
+  tencent_cloud_chat_common:
+    path: tui-components/Flutter/TIMCommon
+  tencent_cloud_chat_conversation:
+    path: tui-components/Flutter/TUIConversation
+  tencent_cloud_chat_message:
+    path: tui-components/Flutter/TUIMessage
+  tencent_cloud_chat_contact:
+    path: tui-components/Flutter/TUIContact
+  tencent_cloud_chat_push:
+    path: tui-components/Flutter/TIMPush
+  tencent_cloud_chat_sticker:
+    path: tui-components/Flutter/TUIEmoji
+  tencent_cloud_chat_message_reaction:
+    path: tui-components/Flutter/TUIEmojiPlugin
+  tencent_cloud_chat_text_translate:
+    path: tui-components/Flutter/TUITranslationPlugin
+  tencent_cloud_chat_sound_to_text:
+    path: tui-components/Flutter/TUIVoiceToTextPlugin
 
 dev_dependencies:
   flutter_test:
