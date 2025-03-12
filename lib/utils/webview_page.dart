@@ -26,16 +26,16 @@ class WebviewPage extends StatelessWidget {
         ),
         leading: SizedBox(
             child: IconButton(
-          padding: const EdgeInsets.only(left: 16),
-          icon: Image.asset(
-            'images/arrow_back.png',
-            package: 'tencent_cloud_chat_uikit',
-            height: 34,
-            width: 34,
-          ),
-          // 返回Home事件
-          onPressed: () => {Navigator.pop(context)},
-        )),
+              padding: const EdgeInsets.only(left: 16),
+              icon: Image.asset(
+                'images/arrow_back.png',
+                package: 'tencent_cloud_chat_uikit',
+                height: 34,
+                width: 34,
+              ),
+              // 返回Home事件
+              onPressed: () => {Navigator.pop(context)},
+            )),
         centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -48,8 +48,10 @@ class WebviewPage extends StatelessWidget {
       ),
       body: SizedBox(
         width: MediaQuery.of(context).size.width,
-        child: WebView(
-            initialUrl: url, javascriptMode: JavascriptMode.unrestricted),
+        child: WebViewWidget(
+            controller: WebViewController()
+              ..setJavaScriptMode(JavaScriptMode.unrestricted)
+              ..loadRequest(Uri.parse(url))),
       ),
     );
   }

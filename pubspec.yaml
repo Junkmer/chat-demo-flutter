@@ -17,14 +17,9 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 1.0.0+1
 
-# If you running this sample app on Flutter 3.7 or higher, please modify this configurations. And add the following code to `pubspec.yaml`:
-#dependency_overrides:
-#  modal_bottom_sheet: ^3.0.0-pre
-#  tencent_extended_text_field: ^1.0.1
-#  tencent_extended_text: ^1.0.2
 environment:
   sdk: '>=3.0.0 <4.0.0'
-  flutter: ">=3.19.0"
+  flutter: ">=3.13.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -35,24 +30,25 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  web: ^0.5.1
+  web: ^1.1.1
   flutter_localizations:
     sdk: flutter
 
   # Tencent Cloud Chat dependencies:
-  tencent_cloud_chat_uikit: ^4.0.1
-  tencent_calls_uikit: 2.7.2
+#  tencent_cloud_chat_uikit: ^4.0.3+1
+  tencent_cloud_chat_uikit:
+    path: tencent_cloud_chat_uikit
   tencent_cloud_chat_push: ^8.3.6498+1
+  tencent_calls_uikit: ^2.7.2
   tencent_cloud_chat_customer_service_plugin: ^0.1.0
 
   # Third party dependencies:
-  cupertino_icons: ^1.0.2
-  webview_flutter: ^3.0.0
+  webview_flutter: ^4.10.0
   flutter_easyloading: ^3.0.3
   desktop_webview_window_for_is: ^0.2.4
   bitsdojo_window: ^0.1.5
   flutter_screenutil: ^5.9.0
-  fluttertoast: ^8.2.1
+  fluttertoast: ^8.2.12
   dio: ^4.0.0
 
 dependency_overrides:
@@ -128,3 +124,14 @@ flutter_icons:
 flutter_native_splash:
   background_image: "assets/splash_new.png"
   android_gravity: center
+
+msix_config:
+  display_name: Tencent Cloud Chat
+  publisher_display_name: Tencent
+  sign_msix: false
+  publisher: CN=Tencent Technology (Shenzhen) Company Limited, O=Tencent Technology(Shenzhen) Company Limited, L=Shenzhen, S=Guangdong Province, C=CN
+  identity_name: com.tencent.chat.flutter
+  msix_version: 2.3.0.0
+  build_windows: false
+  capabilities: internetClient
+  windows_build_args: --dart-define=SDK_APPID=1400187352 --dart-define=KEY=f442d0cca069bbcc8ced55f4f113b965999b928c78e3cd83495728133a06f4cb
