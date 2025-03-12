@@ -1,0 +1,24 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+file init_step.dart as file_init_step_dart{
+    card "InitStep\n应用初始化时一些前期处理逻辑" as init_step_U{
+       rectangle "checkLogin\n检索用户登录状态" as InitStep_checkLogin_M
+       rectangle "directToLogin\n跳转至登录界面" as InitStep_directToLogin_M{
+           stack 执行路由跳转 as route_main_2_login
+       }
+
+       rectangle "directToHomePage\n跳转至首页" as InitStep_directToHomePage_M{
+           (isWideScreen \n（识别屏幕样式）)  as homePage_screen_p
+           stack "窄屏首页" as route_login_2_home_page
+           stack "宽屏首页" as route_login_2_wide_screen1home_page
+           homePage_screen_p -left-> route_login_2_home_page
+           homePage_screen_p -right-> route_login_2_wide_screen1home_page
+       }
+
+       InitStep_checkLogin_M -> InitStep_directToLogin_M
+       InitStep_checkLogin_M ..[hidden] InitStep_directToHomePage_M
+
+    }
+}
+@enduml

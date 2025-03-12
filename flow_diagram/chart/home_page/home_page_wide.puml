@@ -1,0 +1,58 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+'left to right direction 改变方向
+
+'属性初始化设置
+skinparam file {
+    FontColor #DarkGreen
+    BackgroundColor #GhostWhite
+}
+
+file lib/src/pages/cross_platform/wide_screen/home_page.dart as wide_screen1file_home_page_dart{
+    frame "Demo 宽屏首页 页面布局结构" as wide_screen1homePage_FW {
+        component LeftBar\n左侧导航Bar as LeftBar_W{
+            [NavigationBarData\n消息] as LeftBar_NavigationBarData_Msg_W
+            [NavigationBarData\n通讯录] as LeftBar_NavigationBarData_Contact
+            [NavigationBarData\n我的] as LeftBar_NavigationBarData_My
+            [UserAvatar\n左下角用户头像] as LeftBar_NavigationBarData_UserAvatar
+
+            LeftBar_NavigationBarData_Msg_W ..[hidden]  LeftBar_NavigationBarData_Contact
+            LeftBar_NavigationBarData_Contact ..[hidden] LeftBar_NavigationBarData_My
+            LeftBar_NavigationBarData_My ...[hidden] LeftBar_NavigationBarData_UserAvatar
+        }
+
+        component Column as wide_screen1homePage_Column_W {
+
+            usecase "PlatformUtils.isWindows()\n是否是 PC、MAC、Linux 平台"  as Column_isWindows_P
+            rectangle 顶部右上角按钮 as wide_screen1homePage_right_top_buttons{
+                [MinimizeWindowButton\n最小化] as MinimizeWindowButton_W
+                [MaximizeWindowButton\n最大化] as MaximizeWindowButton_W
+                [CloseWindowButton\n关闭窗口] as CloseWindowButton_W
+
+                MinimizeWindowButton_W .[hidden] MaximizeWindowButton_W
+                MaximizeWindowButton_W .[hidden] CloseWindowButton_W
+            }
+            Column_isWindows_P .> wide_screen1homePage_right_top_buttons : true
+
+            component IndexedStack\n右下角视图布局 as IndexedStack_W{
+                [ConversationAndChat\n会话列表+聊天页面] as ConversationAndChat_W
+                [component ContactsAndProfile\n通讯录+用户资料] as ContactsAndProfile_W
+                [MeAndTencent\n我的+IM功能设置] as MeAndTencent_W
+
+                ConversationAndChat_W .[hidden].  ContactsAndProfile_W
+                ContactsAndProfile_W .[hidden]. MeAndTencent_W
+            }
+
+            Column_isWindows_P ..[hidden] IndexedStack_W
+        }
+
+        LeftBar_NavigationBarData_Msg_W . ConversationAndChat_W
+        LeftBar_NavigationBarData_Contact . ContactsAndProfile_W
+        LeftBar_NavigationBarData_My . MeAndTencent_W
+
+        LeftBar_W .[hidden]. wide_screen1homePage_Column_W
+    }
+}
+
+@enduml

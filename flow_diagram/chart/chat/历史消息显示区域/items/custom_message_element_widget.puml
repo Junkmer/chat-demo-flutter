@@ -1,0 +1,69 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+'属性初始化设置
+skinparam file {
+    FontColor #DarkGreen
+    BackgroundColor #GhostWhite
+}
+
+package “v1 demo 层” as v1TUIKit{
+    file lib/utils/custom_message/custom_message_element.dart as custom_message_element_dart{
+        component CustomMessageElem\n自定义消息widget as chat_MessageItemBuilder_CustomMessageElem_W {
+            component _callElemBuilder\n自定义通话消息构建widget as chat_CustomMessageElem__callElemBuilder_W{
+                (callingMessageDataProvider.excludeFromHistory\n是否是排除不需要显示的消息) as chat__callElemBuilder_excludeFromHistory_P
+                rectangle 通话消息 as chat__callElemBuilder_exclude_M{
+                    (callingMessageDataProvider.participantType == CallParticipantType.group) as chat__callElemBuilder_participantType_p
+                    [GroupCallMessageItem\n群通话自定义消息item] as chat__callElemBuilder_GroupCallMessageItem_P
+                    component renderMessageItem as chat__callElemBuilder_renderMessageItem_W{
+                        [CallMessageItem\n单聊通话消息Item] as chat_renderMessageItem_CallMessageItem_W
+                    }
+                    chat__callElemBuilder_participantType_p .left.> chat__callElemBuilder_GroupCallMessageItem_P : true
+                    chat__callElemBuilder_participantType_p .right.> chat__callElemBuilder_renderMessageItem_W : false
+                }
+                chat__callElemBuilder_exclude_M <.. chat__callElemBuilder_excludeFromHistory_P : true
+
+                (customElem?.data == "group_create"\n创建群自定义消息) as chat__callElemBuilder_group_create_P
+                [renderMessageItem\n创建群成功] as chat__callElemBuilder_renderMessageItem_createGroup_W
+                chat__callElemBuilder_group_create_P .right.> chat__callElemBuilder_renderMessageItem_createGroup_W : true
+
+                chat__callElemBuilder_excludeFromHistory_P ..[hidden] chat__callElemBuilder_group_create_P
+                chat__callElemBuilder_excludeFromHistory_P ..[hidden] chat__callElemBuilder_renderMessageItem_createGroup_W
+
+                (isCustomerServiceMessage\n是否是智能客服消息) as chat__callElemBuilder_isCustomerServiceMessage_P
+                [MessageCustomerService\n智能客服消息widget] as chat__callElemBuilder_MessageCustomerService_W
+                chat__callElemBuilder_isCustomerServiceMessage_P .right.> chat__callElemBuilder_MessageCustomerService_W : true
+
+                chat__callElemBuilder_group_create_P ..[hidden] chat__callElemBuilder_isCustomerServiceMessage_P
+                chat__callElemBuilder_group_create_P ..[hidden] chat__callElemBuilder_MessageCustomerService_W
+
+                (linkMessage != null\n是否是默认自定义消息) as chat__callElemBuilder_linkMessage_P
+                [renderMessageItem\n自定义消息预定义样式] as chat__callElemBuilder_renderMessageItem_default_custom_message_W
+                chat__callElemBuilder_linkMessage_P .right.> chat__callElemBuilder_renderMessageItem_default_custom_message_W : true
+
+                chat__callElemBuilder_isCustomerServiceMessage_P ..[hidden] chat__callElemBuilder_linkMessage_P
+                chat__callElemBuilder_isCustomerServiceMessage_P ..[hidden] chat__callElemBuilder_renderMessageItem_default_custom_message_W
+
+                (webLinkMessage != null\n消息内部是否是web网页链接) as chat__callElemBuilder_webLinkMessage_P
+                [renderMessageItem\n网页链接消息widget] as chat__callElemBuilder_renderMessageItem_webLink_W
+                chat__callElemBuilder_webLinkMessage_P .right.> chat__callElemBuilder_renderMessageItem_webLink_W : true
+
+                chat__callElemBuilder_linkMessage_P ..[hidden] chat__callElemBuilder_webLinkMessage_P
+                chat__callElemBuilder_linkMessage_P ..[hidden] chat__callElemBuilder_renderMessageItem_webLink_W
+
+                (isVoteMessage\n是否是投票消息) as chat__callElemBuilder_isVoteMessage_P
+                component renderMessageItem as chat__callElemBuilder_renderMessageItem_vote_W{
+                    component TencentCloudChatVoteMessage\n投票消息 as chat_renderMessageItem_TencentCloudChatVoteMessage_W{
+
+                    }
+                }
+                chat__callElemBuilder_isVoteMessage_P .right.> chat__callElemBuilder_renderMessageItem_vote_W
+
+                chat__callElemBuilder_webLinkMessage_P ..[hidden] chat__callElemBuilder_isVoteMessage_P
+                chat__callElemBuilder_webLinkMessage_P ..[hidden] chat__callElemBuilder_renderMessageItem_vote_W
+            }
+        }
+    }
+}
+
+@enduml

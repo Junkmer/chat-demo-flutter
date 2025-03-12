@@ -1,0 +1,54 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+'属性初始化设置
+skinparam file {
+    FontColor #DarkGreen
+    BackgroundColor #GhostWhite
+}
+
+file chat-uikit-flutter/lib/ui/views/TIMUIKitChat/TIMUIKItMessageList/tim_uikit_chat_history_message_list.dart as tim_uikit_chat_history_message_list_dart{
+    component Stack as stack_W{
+        component Scrollbar\n滑动widget as stack_Scrollbar_W{
+            component CustomScrollView {
+                (slivers) as scrollView_slivers_P
+                component SliverPadding as scrollView_slivers_W{
+                    (sliver) as slivers_sliver_P
+                    component SliverList as slivers_sliver_W
+                    slivers_sliver_P . slivers_sliver_W
+                    slivers_sliver_P . slivers_sliver_W
+
+                    component SliverPadding as slivers_padding_W
+
+                    slivers_sliver_W ..[hidden] slivers_padding_W
+
+                    component SliverPadding as slivers_padding_2_W{
+                        (sliver) as padding_sliver_P
+                        component Selector as padding_sliver_W{
+
+                        }
+                        padding_sliver_P . padding_sliver_W
+                        padding_sliver_P . padding_sliver_W
+                    }
+
+                    slivers_padding_W ..[hidden] slivers_padding_2_W
+                }
+                scrollView_slivers_P . scrollView_slivers_W
+                scrollView_slivers_P . scrollView_slivers_W
+            }
+        }
+    }
+
+    component TIMUIKitHistoryMessageListTongueContainer\n消息悬浮小舌头widget as tongueContainer_W{
+    }
+
+    stack_W ..[hidden] tongueContainer_W
+
+    (loadingPlace == LoadingPlace.top) as loadingPlace_P
+    component Positioned as Positioned_W{
+        card LoadingAnimationWidget.staggeredDotsWave
+    }
+    loadingPlace_P .> Positioned_W
+
+    tongueContainer_W ..[hidden] Positioned_W
+}
+@enduml

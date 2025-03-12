@@ -1,0 +1,95 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+'属性初始化设置
+skinparam file {
+    FontColor #DarkGreen
+    BackgroundColor #GhostWhite
+}
+
+file lib/src/pages/home_page.dart as file_home_page_dart{
+    frame "Demo 窄屏首页 页面布局结构" as homePage_FW {
+        component TencentPage as home_page_TencentPage_W {
+
+            component AppBar\n顶部Title as home_page_TencentPage_appBar {
+                (title\n标题) as AppBar_title_P
+                component Text as AppBar_title_Text_W{
+                    [localSetting.connectStatus \n  == success > 消息\n  == connecting > 连接中...\n  == failed > 连接失败] as Text_Msg_W
+                    [联系人] as Text_Contact_W
+                    [我的] as Text_Me_W
+
+                    Text_Msg_W . Text_Contact_W
+                    Text_Contact_W . Text_Me_W
+                }
+                AppBar_title_P . AppBar_title_Text_W
+                AppBar_title_P . AppBar_title_Text_W
+
+                (actions\n扩展能力) as AppBar_actions_P
+                [IconButton\n右上角加号] as AppBar_actions_IconButton_W
+                AppBar_actions_P . AppBar_actions_IconButton_W : currentIndex == 0 || 1
+                AppBar_actions_P . AppBar_actions_IconButton_W
+
+                AppBar_title_Text_W ..[hidden] AppBar_actions_P
+
+                rectangle "_showTooltip" as TencentPage__showTooltip_M {
+                    card SuperTooltip\n展示弹窗数据{
+                        rectangle _getTooltipContent\n获取窗口显示的数据 {
+                            json contactTooltip{
+                                "添加好友":"添加群聊"
+                            }
+                            json conversationTooltip{
+                                "发起会话":"创建群聊"
+                            }
+                            (currentIndex\n导航类型) as _getTooltipContent_currentIndex_P
+
+                            _getTooltipContent_currentIndex_P .left.> contactTooltip : = 1
+                            _getTooltipContent_currentIndex_P .right.> conversationTooltip := 0
+                        }
+                    }
+                }
+                AppBar_actions_IconButton_W ..> TencentPage__showTooltip_M : onTap
+            }
+
+            rectangle body\n装载器 as home_page_TencentPage_body{
+                component NavigationBarData\n会话界面Widget as home_page_TencentPage_body_NavigationBarData_Conversation_W{
+                    component [Conversation]
+                }
+
+                component NavigationBarData\n通讯录界面Widget as home_page_TencentPage_body_NavigationBarData_Contact_W{
+                    component [Contact]
+                }
+
+                component NavigationBarData\n我的资料界面Widget as home_page_TencentPage_body_NavigationBarData_MyProfile_W{
+                    component [MyProfile]
+                }
+            }
+
+            TencentPage__showTooltip_M ..[hidden] home_page_TencentPage_body
+
+            component BottomNavigationBar\n底部导航栏 as BottomNavigationBar_W{
+                component BarItem\n消息 as BarItem_Message_W{
+                    component TIMUIKitConversationTotalUnread\n会话未读总数 as BottomNavigationBa_TIMUIKitConversationTotalUnread_W{
+                        [UnreadMessage\n具体未读数量] as BottomNavigationBa_TIMUIKitConversationTotalUnread_UnreadMessage_W
+                    }
+                }
+                component BarItem\n通讯录 as BarItem_Contact_W{
+                    component TIMUIKitUnreadCount\n未决列表申请未读数 as BottomNavigationBa_TIMUIKitUnreadCount_W{
+                        [UnreadMessage\n具体未读数量] as BottomNavigationBa_TIMUIKitUnreadCount_TIMUIKitUnreadCount_W
+                    }
+                }
+                [BarItem\n我的] as BarItem_MyProfile_W
+
+                BarItem_Message_W .[hidden] BarItem_Contact_W
+                BarItem_Contact_W .[hidden] BarItem_MyProfile_W
+            }
+
+            home_page_TencentPage_body ..[hidden] BottomNavigationBar_W
+            home_page_TencentPage_body ..[hidden] BottomNavigationBar_W
+
+            home_page_TencentPage_body_NavigationBarData_Conversation_W *.* BarItem_Message_W
+            home_page_TencentPage_body_NavigationBarData_Contact_W *.* BarItem_Contact_W
+            home_page_TencentPage_body_NavigationBarData_MyProfile_W *.* BarItem_MyProfile_W
+        }
+    }
+}
+@enduml

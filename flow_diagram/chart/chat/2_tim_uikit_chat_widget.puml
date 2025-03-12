@@ -1,0 +1,92 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+'属性初始化设置
+skinparam file {
+    FontColor #DarkGreen
+    BackgroundColor #GhostWhite
+}
+
+package “v1 uikit 层” as v1TUIKit{
+    file chat-uikit-flutter/lib/ui/views/TIMUIKitChat/tim_uikit_chat.dart as tim_uikit_chat_dart{
+        component TIMUIKitChatProviderScope\nUIKIT顶层widget as chat_TIMUIKitChat_TIMUIKitChatProviderScope_W{
+            component "(context, model, w)/GestureDetector/Scaffold" as chat_TIMUIKitChatProviderScope_GestureDetector_W{
+                component Scaffold as chat_GestureDetector_Scaffold_W{
+                    (appBar\n最终窄屏聊天页面顶部的APPBar样式) as chat_Scaffold_appBar_P
+                    component TIMUIKitAppBar\nUIKit层AppBar基础widget as chat_Scaffold_TIMUIKitAppBar_W{
+                    }
+                    chat_Scaffold_appBar_P .right. chat_Scaffold_TIMUIKitAppBar_W : widget.customAppBar == null
+                    chat_Scaffold_appBar_P .right. chat_Scaffold_TIMUIKitAppBar_W
+
+                    (body) as Scaffold_body_M
+                    component DropTarget\n移动放置widget as Scaffold_body_W{
+                        (filteredApplicationList.isNotEmpty\n加群未决列表是否不为空) as chat_Scaffold_isNotEmpty_P
+                        component _renderJoinGroupApplication\n顶部显示加群未决列表提示widget as chat_Scaffold__renderJoinGroupApplication_W{
+                        }
+                        chat_Scaffold_isNotEmpty_P .right.> chat_Scaffold__renderJoinGroupApplication_W : true
+
+                        (_joinInGroupCallWidget\n加入群通话widget是否不为空) as  chat_Scaffold__joinInGroupCallWidget_p
+                        component _joinInGroupCallWidget\n顶部显示加群未决列表widget as chat_Scaffold__joinInGroupCallWidget_W{
+                        }
+                        chat_Scaffold__joinInGroupCallWidget_p .right.> chat_Scaffold__joinInGroupCallWidget_W : false
+
+                        chat_Scaffold__renderJoinGroupApplication_W ..[hidden] chat_Scaffold__joinInGroupCallWidget_W
+
+                        component "Expanded/Container/Align/Listener/TIMUIKitHistoryMessageListContainer\n历史消息展示区域widget" as chat_Scaffold_TIMUIKitHistoryMessageListContainer_W{
+                            component TIMUIKitHistoryMessageListSelector\nUIKit历史消息选择器 as chat_TIMUIKitHistoryMessageListContainer_TIMUIKitHistoryMessageListSelector_W{
+                                component TIMUIKitHistoryMessageListItem\n历史消息列表ItemWidget as chat_TIMUIKitHistoryMessageListSelector_TIMUIKitHistoryMessageListItem_W{
+                                }
+                            }
+                        }
+                        chat_Scaffold__joinInGroupCallWidget_W ..[hidden] chat_Scaffold_TIMUIKitHistoryMessageListContainer_W
+
+                        component Selector\底部输入面板区域 as DropTarget_Selector_W{
+                            (builder) as Selector_builder_P
+                            rectangle "(context, value, child){}\n匿名函数，返回widget" as Selector_builder_M{
+                                (value) as builder_value_P
+                                [MultiSelectPanel\n多选面板] as builder_MultiSelectPanel_Widget
+                                (widget.textFieldBuilder\n外部传入的面板是否为空) as builder_textFieldBuilder_P
+                                [widget.textFieldBuilder!(context)\n加载外部传入的widget] as builder_textFieldBuilder_W
+                                component TIMUIKitInputTextField\nUIKit层输入面板widget as builder_TIMUIKitInputTextField_W{
+                                }
+                                builder_value_P .> builder_MultiSelectPanel_Widget : true
+                                builder_value_P ..> builder_textFieldBuilder_P : false
+                                builder_textFieldBuilder_P .> builder_textFieldBuilder_W : false
+                                builder_textFieldBuilder_P ..> builder_TIMUIKitInputTextField_W : true
+                            }
+                            Selector_builder_P .> Selector_builder_M
+
+'                            (_dragging\n是否正处于拖动状态) as DropTarget__dragging_P
+                            card "_dragging == true\n当前正处于拖动状态" as DropTarget__dragging_M{
+                                [TIMUIKitSendFile]
+                                [AtMemberPanel]
+                            }
+                            Selector_builder_M ....[hidden] DropTarget__dragging_M
+
+                        }
+                        chat_Scaffold_TIMUIKitHistoryMessageListContainer_W ..[hidden] DropTarget_Selector_W
+                    }
+                    Scaffold_body_W .right. Scaffold_body_M
+                    Scaffold_body_W .right. Scaffold_body_M
+
+                    rectangle "sendFileWithConfirmation\n拖拽发送文件确认处理函数" as Scaffold_sendFileWithConfirmation_M{
+                        (isCanSend\n判断拖拽的文件是否能发送) as sendFileWithConfirmation_isCanSend_P
+                        card "TUIKitWidePopup.showSecondaryConfirmDialog\n文件无法发送dialog" as sendFileWithConfirmation_showSecondaryConfirmDialog_U
+                        card "TUIKitWidePopup.showPopupWindow\n发送拖拽文件之前的确认窗口" as sendFileWithConfirmation_showPopupWindow_U
+
+                        sendFileWithConfirmation_isCanSend_P ..> sendFileWithConfirmation_showSecondaryConfirmDialog_U : false
+                        sendFileWithConfirmation_isCanSend_P .> sendFileWithConfirmation_showPopupWindow_U : true
+                    }
+                    Scaffold_body_W ..> Scaffold_sendFileWithConfirmation_M :onDragDone
+
+                    chat_Scaffold_TIMUIKitAppBar_W ..[hidden] Scaffold_body_W
+                }
+            }
+            rectangle "textFieldController.hideAllPanel()\n隐藏键盘" as TIMUIKitChat_hideAllPanel_M{
+            }
+            chat_TIMUIKitChatProviderScope_GestureDetector_W .right.> TIMUIKitChat_hideAllPanel_M : onTap
+
+        }
+    }
+}
+@enduml

@@ -1,0 +1,119 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+'属性初始化设置
+skinparam file {
+    FontColor #DarkGreen
+    BackgroundColor #GhostWhite
+}
+
+file lib/src/my_profile_detail.dart as file_my_profile_detail_dart{
+    frame "Demo层 MyProfileDetail 页面布局结构" as MyProfileDetail_FW {
+        component Scaffold{
+            (appBar\n顶部导航) as MyProfileDetail_appBar_P
+            component "AppBar" as MyProfileDetail_AppBar_W{
+                [Text\n个人资料]
+            }
+            MyProfileDetail_appBar_P . MyProfileDetail_AppBar_W : isWideScreen != null
+            MyProfileDetail_appBar_P . MyProfileDetail_AppBar_W
+
+            (body) as MyProfileDetail_body_P
+            component Container\Column as MyProfileDetail_body_W{
+                (isWideScreen) as profile_isWideScreen_image_P
+                [TIMUIKitProfileUserInfoCard\n用户资料卡] as profile_TIMUIKitProfileUserInfoCard_W
+                [TIMUIKitOperationItem\n头像] as profile_TIMUIKitOperationItem_image_W
+
+                profile_isWideScreen_image_P .right.> profile_TIMUIKitProfileUserInfoCard_W : true
+                profile_isWideScreen_image_P .left.> profile_TIMUIKitOperationItem_image_W : false
+
+                rectangle showSelectAvatarPage\n跳转至头像选择页方法 as profile_showSelectAvatarPage_M{
+                    stack AvatarSelectPage\n头像选择页 as route_my_profile_detail_2_avatar_select_page{
+
+                    }
+                }
+                profile_TIMUIKitProfileUserInfoCard_W .> profile_showSelectAvatarPage_M : onClickAvatar
+                profile_TIMUIKitOperationItem_image_W ..> profile_showSelectAvatarPage_M : onTap
+
+                [TIMUIKitOperationItem\n昵称] as profile_TIMUIKitOperationItem_nick_W
+                [showTextInputBottomSheet\n显示"修改昵称"底部widget] as profile_showTextInputBottomSheet_nick_W
+                profile_TIMUIKitOperationItem_nick_W .> profile_showTextInputBottomSheet_nick_W : onTapDown
+
+                profile_showSelectAvatarPage_M ..[hidden] profile_TIMUIKitOperationItem_nick_W
+
+                [TIMUIKitProfileWidget.userAccountBar\n账号] as profile_userAccountBar_W
+
+                profile_TIMUIKitOperationItem_nick_W ..[hidden] profile_userAccountBar_W
+
+                [TIMUIKitOperationItem\n个性签名] as profile_TIMUIKitOperationItem_signature_W
+                [showTextInputBottomSheet\n显示"修改签名"底部widget] as profile_showTextInputBottomSheet_signature_W
+                profile_TIMUIKitOperationItem_signature_W .> profile_showTextInputBottomSheet_signature_W : onTapDown
+
+                profile_userAccountBar_W ..[hidden] profile_TIMUIKitOperationItem_signature_W
+
+                [TIMUIKitProfileWidget.genderBarWithArrow\n性别] as profile_genderBarWithArrow_W
+                rectangle (detail)\n点击事件处理匿名函数 as profile_genderBarWithArrow_M{
+                    (isWideScreen) as genderBarWithArrow_isWideScreen_P
+                    rectangle TUIKitWidePopup.showPopupWindow as genderBarWithArrow_showPopupWindow_U{
+                        component TUIKitColumnMenu\n垂直菜单组件 as showPopupWindow_gender_W{
+                        }
+                    }
+                    rectangle showGenderChoseSheet\n显示性别选项函数 as profile_showGenderChoseSheet_M{
+                        component showAdaptiveActionSheet\n展示选择布局 as showGenderChoseSheet_showAdaptiveActionSheet_W{
+                        }
+                    }
+                    genderBarWithArrow_isWideScreen_P .> genderBarWithArrow_showPopupWindow_U : true
+                    genderBarWithArrow_isWideScreen_P ..> profile_showGenderChoseSheet_M : false
+                }
+                profile_genderBarWithArrow_W .> profile_genderBarWithArrow_M
+
+                profile_TIMUIKitOperationItem_signature_W ..[hidden] profile_genderBarWithArrow_W
+
+                [TIMUIKitProfileWidget.birthdayBar\n生日] as profile_birthdayBar_W
+                rectangle _selectDate\n选择日期函数 as profile_birthdayBar_M{
+                    component showDatePicker\n展示日期选择器 as _selectDate_showDatePicker_W{
+                    }
+                }
+                profile_birthdayBar_W .> profile_birthdayBar_M
+
+                profile_genderBarWithArrow_W ...[hidden] profile_birthdayBar_W
+
+                (isWideScreen) as logout_isWideScreen_P
+                component OutlinedButton as profile_logout_W{
+                    [Text\n退出登录]
+                }
+                logout_isWideScreen_P .> profile_logout_W : true
+
+                profile_birthdayBar_W ..[hidden] logout_isWideScreen_P
+
+                (isWideScreen) as setting_isWideScreen_P
+                component Row as profile_setting_W{
+                    component OutlinedButton as setting_set_W{
+                        [Text\n设置] as OutlinedButton_set_W
+                        card "TUIKitWidePopup.showPopupWindow\n设置" as OutlinedButton_showPopupWindow_set_U
+                        OutlinedButton_set_W .> OutlinedButton_showPopupWindow_set_U : onPressed
+
+                        [Text\n联系我们] as OutlinedButton_link_W
+                        card "TUIKitWidePopup.showPopupWindow\n联系我们" as OutlinedButton_showPopupWindow_link_U
+                        OutlinedButton_link_W .> OutlinedButton_showPopupWindow_link_U : onPressed
+
+                        OutlinedButton_set_W ..[hidden] OutlinedButton_link_W
+
+                        [Text\n关于] as OutlinedButton_about_W
+                        card "TUIKitWidePopup.showPopupWindow\n关于我们" as OutlinedButton_showPopupWindow_about_U
+                        OutlinedButton_about_W .> OutlinedButton_showPopupWindow_about_U : onPressed
+
+                        OutlinedButton_link_W ..[hidden] OutlinedButton_about_W
+                    }
+                }
+                setting_isWideScreen_P .> profile_setting_W : true
+
+                logout_isWideScreen_P ..[hidden] setting_isWideScreen_P
+
+            }
+            MyProfileDetail_body_P . MyProfileDetail_body_W
+            MyProfileDetail_body_P . MyProfileDetail_body_W
+
+            MyProfileDetail_appBar_P ..[hidden] MyProfileDetail_body_P
+        }
+    }
+}
+@enduml

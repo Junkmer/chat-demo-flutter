@@ -1,0 +1,77 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+'属性初始化设置
+skinparam file {
+    FontColor #DarkGreen
+    BackgroundColor #GhostWhite
+}
+
+file lib/src/contact.dart as file_contact_dart{
+    component Contact\n通讯录界面 as home_page_TencentPage_body_Contact_W{
+        component TIMUIKitContact\nUIKit层通讯录 as home_page_TencentPage_body_Contact_TIMUIKitContact_W{
+            (topList\n顶部功能列表) as home_page_TencentPage_body_Contact_topList_P
+            component TopListItem\n新的联系人 as home_page_TencentPage_body_Contact_NewContact{
+
+            }
+
+            component TopListItem\n我的群聊 as home_page_TencentPage_body_Contact_MyGroup{
+
+            }
+            home_page_TencentPage_body_Contact_NewContact ..[hidden] home_page_TencentPage_body_Contact_MyGroup
+
+            component TopListItem\n黑名单 as home_page_TencentPage_body_Contact_BlackList{
+
+            }
+            home_page_TencentPage_body_Contact_MyGroup ..[hidden] home_page_TencentPage_body_Contact_BlackList
+
+            component TopListItem\n在线客服 as home_page_TencentPage_body_Contact_CustomerService{
+
+            }
+            home_page_TencentPage_body_Contact_BlackList ..[hidden] home_page_TencentPage_body_Contact_CustomerService
+
+
+            home_page_TencentPage_body_Contact_topList_P - home_page_TencentPage_body_Contact_NewContact
+            home_page_TencentPage_body_Contact_topList_P - home_page_TencentPage_body_Contact_MyGroup : isWideScreen == false
+            home_page_TencentPage_body_Contact_topList_P - home_page_TencentPage_body_Contact_BlackList
+            home_page_TencentPage_body_Contact_topList_P - home_page_TencentPage_body_Contact_CustomerService : isWideScreen == false
+
+            rectangle _topListItemTap as home_page_TencentPage_body_Contact__topListItemTap_M{
+                stack NewContact\n跳转至新的联系人 as route_home_page_2_newContact{
+
+                }
+
+                stack MyGroup\n跳转至我的群聊 as route_home_page_2_group_list{
+
+                }
+                route_home_page_2_newContact ..[hidden] route_home_page_2_group_list
+
+                stack BlackList\n跳转至黑名单 as route_home_page_2_blackList{
+
+                }
+                route_home_page_2_group_list ..[hidden] route_home_page_2_blackList
+
+                stack CustomerService\n跳转至智能客服 as route_home_page_2_customerServicePage{
+
+                }
+                route_home_page_2_blackList ..[hidden] route_home_page_2_customerServicePage
+            }
+            home_page_TencentPage_body_Contact_NewContact . route_home_page_2_newContact : isWideScreen = false
+            home_page_TencentPage_body_Contact_MyGroup . route_home_page_2_group_list : isWideScreen = false
+            home_page_TencentPage_body_Contact_BlackList . route_home_page_2_blackList : isWideScreen = false
+            home_page_TencentPage_body_Contact_CustomerService . route_home_page_2_customerServicePage : isWideScreen = false
+
+
+            (topListItemBuilder\n好友列表) as home_page_TencentPage_body_MyProfile_topListItemBuilder_M
+            component _topListBuilder as home_page_TencentPage_body_MyProfile__topListBuilder_W{
+                component TIMUIKitUnreadCount as home_page_TencentPage_body_MyProfile__topListBuilder_TIMUIKitUnreadCount_W{
+                    [UnreadMessage] as home_page_TencentPage_body_MyProfile__topListBuilder_TIMUIKitUnreadCount_UnreadMessage_W
+                }
+            }
+            home_page_TencentPage_body_MyProfile_topListItemBuilder_M .right.> home_page_TencentPage_body_MyProfile__topListBuilder_W
+
+            home_page_TencentPage_body_Contact_CustomerService ..[hidden] home_page_TencentPage_body_MyProfile_topListItemBuilder_M
+        }
+    }
+}
+@enduml

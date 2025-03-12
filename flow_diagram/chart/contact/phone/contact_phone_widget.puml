@@ -1,0 +1,119 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+'属性初始化设置
+skinparam file {
+    FontColor #DarkGreen
+    BackgroundColor #GhostWhite
+}
+
+file lib/src/contact.dart as file_contact_dart{
+    component Contact\n通讯录界面 as Contact_W{
+        component TIMUIKitContact\nUIKit层通讯录 as Contact_TIMUIKitContact_W{
+            (topList\n顶部功能列表) as Contact_topList_P
+            component TopListItem\n新的联系人 as Contact_NewContact{
+
+            }
+
+            component TopListItem\n我的群聊 as Contact_MyGroup{
+
+            }
+            Contact_NewContact ..[hidden] Contact_MyGroup
+
+            component TopListItem\n黑名单 as Contact_BlackList{
+
+            }
+            Contact_MyGroup ..[hidden] Contact_BlackList
+
+            component TopListItem\n在线客服 as Contact_CustomerService{
+
+            }
+            Contact_BlackList ..[hidden] Contact_CustomerService
+
+
+            Contact_topList_P - Contact_NewContact
+            Contact_topList_P - Contact_MyGroup : isWideScreen == false
+            Contact_topList_P - Contact_BlackList
+            Contact_topList_P - Contact_CustomerService : isWideScreen == false
+
+            rectangle "_topListItemTap("newContact")" as Contact__topListItemTap_newContact_M{
+                
+                (isWideScreen\n是否是宽屏) as _topListItemTap_newContact_M
+                stack NewContact\n跳转至新的联系人 as route_home_page_2_newContact{
+            
+                }
+                _topListItemTap_newContact_M .> route_home_page_2_newContact : false
+            }
+
+            rectangle "_topListItemTap("groupList")" as Contact__topListItemTap_groupList_M{
+
+                (isWideScreen\n是否是宽屏) as _topListItemTap_groupList_M
+                stack MyGroup\n跳转至我的群聊 as route_home_page_2_group_list{
+
+                }
+                _topListItemTap_groupList_M .> route_home_page_2_group_list : false
+
+            }
+            Contact__topListItemTap_newContact_M ..[hidden] Contact__topListItemTap_groupList_M
+
+            rectangle "_topListItemTap("blackList")" as Contact__topListItemTap_blackList_M{
+
+                (isWideScreen\n是否是宽屏) as _topListItemTap_blackList_M
+                stack BlackList\n跳转至黑名单 as route_home_page_2_blackList{
+
+                }
+                _topListItemTap_blackList_M .> route_home_page_2_blackList : false
+
+            }
+            Contact__topListItemTap_groupList_M ..[hidden] Contact__topListItemTap_blackList_M
+
+            rectangle "_topListItemTap("customerService")" as Contact__topListItemTap_Contact_CustomerService_M{
+
+                (isWideScreen\n是否是宽屏) as _topListItemTap_Contact_CustomerService_M
+                stack CustomerService\n跳转至智能客服 as route_home_page_2_customerServicePage{
+
+                }
+                _topListItemTap_Contact_CustomerService_M .> route_home_page_2_customerServicePage : false
+
+            }
+            Contact__topListItemTap_blackList_M ..[hidden] Contact__topListItemTap_Contact_CustomerService_M
+
+            Contact_NewContact .> Contact__topListItemTap_newContact_M : onTap
+            Contact_MyGroup .> Contact__topListItemTap_groupList_M : onTap
+            Contact_BlackList .> Contact__topListItemTap_blackList_M : onTap
+            Contact_CustomerService .> Contact__topListItemTap_Contact_CustomerService_M : onTap
+
+            (topListItemBuilder\n顶部“新的联系人”自定义widget) as MyProfile_topListItemBuilder_M
+            component _topListBuilder as MyProfile__topListBuilder_W{
+                component TIMUIKitUnreadCount as MyProfile__topListBuilder_TIMUIKitUnreadCount_W{
+                    [UnreadMessage] as MyProfile__topListBuilder_TIMUIKitUnreadCount_UnreadMessage_W
+                }
+            }
+            MyProfile_topListItemBuilder_M .right. MyProfile__topListBuilder_W
+            MyProfile_topListItemBuilder_M .right. MyProfile__topListBuilder_W
+
+            Contact_CustomerService ..[hidden] MyProfile_topListItemBuilder_M
+
+            (onTapItem\n供外部监听好友列表点击的onTap参数) as TIMUIKitContact_onTapItem_P
+            rectangle "(item) {}\n好友列表itemOnTap匿名函数" as TIMUIKitContact_itemOnTap_M{
+                stack UserProfile\n跳转至用户资料页 as route_home_page_2_user_profile{
+
+                }
+            }
+            TIMUIKitContact_onTapItem_P . TIMUIKitContact_itemOnTap_M
+            TIMUIKitContact_onTapItem_P . TIMUIKitContact_itemOnTap_M
+
+            MyProfile_topListItemBuilder_M ..[hidden] TIMUIKitContact_onTapItem_P
+
+            (emptyBuilder\n无还有列表数据空widget外部传参) as TIMUIKitContact_emptyBuilder_P
+            component Center as TIMUIKitContact_Center_W{
+                [Text\n无联系人] as TIMUIKitContact_emptyBuilder_W
+            }
+            TIMUIKitContact_emptyBuilder_P . TIMUIKitContact_Center_W
+            TIMUIKitContact_emptyBuilder_P . TIMUIKitContact_Center_W
+
+            TIMUIKitContact_onTapItem_P ..[hidden] TIMUIKitContact_emptyBuilder_P
+        }
+    }
+}
+@enduml

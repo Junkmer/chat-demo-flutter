@@ -1,0 +1,45 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+'属性初始化设置
+skinparam file {
+    FontColor #DarkGreen
+    BackgroundColor #GhostWhite
+}
+
+file lib/src/conversation.dart as file_home_page_dart{
+    component Column as conversation_body_Column_W{
+        component SearchEntry\n顶部搜索 as conversation_SearchEntry_W{
+            (desktopWidget\n手机端) as conversation_SearchEntry_desktopWidget_M
+            [SearchEntryNarrow\n窄屏搜索框] as conversation_SearchEntry_SearchEntryNarrow_W
+
+            conversation_SearchEntry_desktopWidget_M . conversation_SearchEntry_SearchEntryNarrow_W
+            conversation_SearchEntry_desktopWidget_M . conversation_SearchEntry_SearchEntryNarrow_W
+        }
+
+        component Expanded as conversation_body_Expanded_W{
+            component TIMUIKitConversation\nUIKit层会话widget as conversation_Expanded_W{
+                (onTapItem\n会话列表Item点击事件) as conversation_TIMUIKitConversation_onTapItem_P
+                rectangle _handleOnConvItemTaped\n路由跳转 as conversation_TIMUIKitConversation__handleOnConvItemTaped_M{
+                    stack 跳转至聊天页面 as route_home_page_2_chat
+                }
+                conversation_TIMUIKitConversation_onTapItem_P .right. conversation_TIMUIKitConversation__handleOnConvItemTaped_M
+                conversation_TIMUIKitConversation_onTapItem_P .right. conversation_TIMUIKitConversation__handleOnConvItemTaped_M
+                
+                (lastMessageBuilder\n lastMessage解析) as conversation_TIMUIKitConversation_lastMessageBuilder_P
+                rectangle 匿名函数 as conversation_TIMUIKitConversation_anonymous_M{
+                    (lastMsg.elemType\n消息elem类型) as conversation_TIMUIKitConversation_anonymous_elemType_M
+                    [RenderCustomMessage\n自定义消息widget] as conversation_TIMUIKitConversation_anonymous_RenderCustomMessage_M
+                    conversation_TIMUIKitConversation_anonymous_elemType_M .right. conversation_TIMUIKitConversation_anonymous_RenderCustomMessage_M :V2TIM_ELEM_TYPE_CUSTOM
+                }
+                conversation_TIMUIKitConversation_lastMessageBuilder_P .right. conversation_TIMUIKitConversation_anonymous_M
+                conversation_TIMUIKitConversation_lastMessageBuilder_P .right. conversation_TIMUIKitConversation_anonymous_M
+                
+                conversation_TIMUIKitConversation_onTapItem_P ..[hidden] conversation_TIMUIKitConversation_lastMessageBuilder_P
+            }
+        }
+
+        conversation_SearchEntry_W ..[hidden] conversation_body_Expanded_W
+    }
+}
+@enduml

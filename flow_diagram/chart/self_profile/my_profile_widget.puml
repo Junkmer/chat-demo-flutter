@@ -1,0 +1,47 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+'属性初始化设置
+skinparam file {
+    FontColor #DarkGreen
+    BackgroundColor #GhostWhite
+}
+
+file lib/src/profile.dart as file_profile_dart{
+component MyProfile\n窄屏我的资料界面 as home_page_TencentPage_body_MyProfile_W{
+    component TIMUIKitProfile as home_page_TencentPage_body_MyProfile_TIMUIKitProfile_W{
+        component TIMUIKitProfileUserInfoCard as home_page_TencentPage_body_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_W{
+            usecase "defaultWidget\n默认布局" as home_page_TencentPage_body_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_defaultWidget_W
+            [TIMUIKitProfileUserInfoCardNarrow\n用户资料窄屏布局] as home_page_TencentPage_body_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCardNarrow_W
+            home_page_TencentPage_body_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_defaultWidget_W .right. home_page_TencentPage_body_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCardNarrow_W
+            home_page_TencentPage_body_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_defaultWidget_W .right. home_page_TencentPage_body_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCardNarrow_W
+
+            usecase "desktopWidget\n桌面端布局" as home_page_TencentPage_body_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_desktopWidget_W
+            [TIMUIKitProfileUserInfoCardWide\n用户资料宽屏布局] as home_page_TencentPage_body_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCardWide_W
+            home_page_TencentPage_body_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_desktopWidget_W .right. home_page_TencentPage_body_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCardWide_W
+            home_page_TencentPage_body_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_desktopWidget_W .right. home_page_TencentPage_body_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCardWide_W
+
+            home_page_TencentPage_body_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_defaultWidget_W ..[hidden] home_page_TencentPage_body_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_desktopWidget_W
+        }
+        stack MyProfileDetail\n跳转至我的详情页 as route_home_page_2_my_profile_detail_M{
+        }
+
+        home_page_TencentPage_body_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_W .right.> route_home_page_2_my_profile_detail_M :onTap
+
+        [TIMUIKitOperationItem\n加我为好友的方式] as home_page_TencentPage_body_MyProfile_TIMUIKitProfile_addMe_W
+        [TIMUIKitOperationItem\n更换皮肤] as home_page_TencentPage_body_MyProfile_TIMUIKitProfile_skin_W
+        [TIMUIKitOperationItem\n消息阅读状态] as home_page_TencentPage_body_MyProfile_TIMUIKitProfile_read_W
+        [TIMUIKitOperationItem\n显示在线状态] as home_page_TencentPage_body_MyProfile_TIMUIKitProfile_status_W
+        [TIMUIKitOperationItem\n关于腾讯云] as home_page_TencentPage_body_MyProfile_TIMUIKitProfile_about_W
+        rectangle _handleLogout\n退出登录 as home_page_TencentPage_body_MyProfile_TIMUIKitProfile_logout_W{
+        }
+
+        home_page_TencentPage_body_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCardWide_W ..[hidden] home_page_TencentPage_body_MyProfile_TIMUIKitProfile_addMe_W
+        home_page_TencentPage_body_MyProfile_TIMUIKitProfile_addMe_W .[hidden] home_page_TencentPage_body_MyProfile_TIMUIKitProfile_skin_W
+        home_page_TencentPage_body_MyProfile_TIMUIKitProfile_skin_W .[hidden] home_page_TencentPage_body_MyProfile_TIMUIKitProfile_read_W
+        home_page_TencentPage_body_MyProfile_TIMUIKitProfile_addMe_W ..[hidden] home_page_TencentPage_body_MyProfile_TIMUIKitProfile_status_W
+        home_page_TencentPage_body_MyProfile_TIMUIKitProfile_skin_W ..[hidden] home_page_TencentPage_body_MyProfile_TIMUIKitProfile_about_W
+        home_page_TencentPage_body_MyProfile_TIMUIKitProfile_read_W ..[hidden] home_page_TencentPage_body_MyProfile_TIMUIKitProfile_logout_W
+    }
+}
+@enduml

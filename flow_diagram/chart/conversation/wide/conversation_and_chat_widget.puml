@@ -1,0 +1,28 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+'属性初始化设置
+skinparam file {
+    FontColor #DarkGreen
+    BackgroundColor #GhostWhite
+}
+
+file lib/src/pages/cross_platform/wide_screen/conversation_and_chat.dart as file_home_page_dart{
+    component ConversationAndChat\n会话列表+聊天页面 as ConversationAndChat_W {
+        component Search\n宽屏搜索 as ConversationAndChat_Search_W{
+
+        }
+        component Conversation\n会话列表页面 as ConversationAndChat_Conversation_W{
+            component SearchEntry\n顶部搜索 as ConversationAndChat_Conversation_SearchEntry_W{
+                (desktopWidget\n桌面端) as ConversationAndChat_Conversation_SearchEntry_desktopWidget_M
+                [SearchEntryWide\n宽屏搜索框] as ConversationAndChat_Conversation_SearchEntry_SearchEntryWide_W
+
+                ConversationAndChat_Conversation_SearchEntry_desktopWidget_M .> ConversationAndChat_Conversation_SearchEntry_SearchEntryWide_W
+            }
+            [TIMUIKitConversation\nUIKIT层会话列表页] as ConversationAndChat_Conversation_TIMUIKitConversation_W
+
+            ConversationAndChat_Conversation_SearchEntry_W ..[hidden] ConversationAndChat_Conversation_TIMUIKitConversation_W
+        }
+    }
+}
+
+@enduml

@@ -1,0 +1,91 @@
+@startuml
+'https://plantuml.com/component-diagram
+'属性初始化设置
+skinparam file {
+    FontColor #DarkGreen
+    BackgroundColor #GhostWhite
+}
+
+file lib/src/chat.dart as chat_dart{
+    frame "Demo 聊天 页面布局结构" as Chat_FW {
+        component TencentPage\nDemo层baseWidget as Chat_TencentPage_W {
+            component TIMUIKitChat\nUIKIT聊天最外层Widget as chat_TencentPage_TIMUIKitChat_W{
+                (appBarConfig\n窄屏appBar显示样式) as chat_TIMUIKitChat_appBarConfig_P
+                component AppBar as chat_TIMUIKitChat_AppBar_W{
+                    component IconButton\n窄屏聊天页面右上角详情按钮{
+                        (conversationType\n会话类型) as chat_IconButton_conversationType_P
+                        stack "UserProfile\n用户资料详情页" as route_chat_2_user_profile
+                        stack "GroupProfilePage\n群资料详情页" as route_chat_2_group_profile
+                        chat_IconButton_conversationType_P .right.> route_chat_2_user_profile : type = 1
+                        chat_IconButton_conversationType_P .left.> route_chat_2_group_profile : type = 2
+                    }
+                }
+                chat_TIMUIKitChat_appBarConfig_P .right. chat_TIMUIKitChat_AppBar_W
+                chat_TIMUIKitChat_appBarConfig_P .right. chat_TIMUIKitChat_AppBar_W
+
+                (customAppBar\n自定义appBar显示样式) as chat_TIMUIKitChat_customAppBar_P
+                component "ConstrainedBox/Stack/Column" as chat_TIMUIKitChat_customAppBar_W{
+                    component TIMUIKitAppBar\n宽屏聊天页面顶部UIKit组件appBar{
+                        (onClickTitle\n标题点击事件) as TIMUIKitAppBar_onClickTitle_P
+                        rectangle "(details){}\n用户资料详情页" as TIMUIKitAppBar_onClickTitle_M{
+                        }
+                        TIMUIKitAppBar_onClickTitle_P .right.> TIMUIKitAppBar_onClickTitle_M
+                        TIMUIKitAppBar_onClickTitle_P .right.> TIMUIKitAppBar_onClickTitle_M
+
+                        (config\n宽屏AppBar对外设置参数) as TIMUIKitAppBar_config_P
+                        component "AppBar\n系统自带AppBar widget" as TIMUIKitAppBar_config_W{
+                            component IconButton\n宽屏AppBar右上角按钮widget as AppBar_IconButton_W{
+                                component Icon\n宽屏AppBar右上角图标 as IconButton_Icon_W{
+                                }
+                                rectangle "onClickUserName\nAppBar标题点击事件处理函数" as AppBar_onClickUserName_M{
+                                }
+                                IconButton_Icon_W .> AppBar_onClickUserName_M : onPressed
+                            }
+                        }
+                        TIMUIKitAppBar_config_P .right.> TIMUIKitAppBar_config_W
+                        TIMUIKitAppBar_config_P .right.> TIMUIKitAppBar_config_W
+
+                        TIMUIKitAppBar_onClickTitle_M ..[hidden] TIMUIKitAppBar_config_W
+                    }
+                }
+                chat_TIMUIKitChat_customAppBar_P .right. chat_TIMUIKitChat_customAppBar_W
+                chat_TIMUIKitChat_customAppBar_P .right. chat_TIMUIKitChat_customAppBar_W
+
+                chat_TIMUIKitChat_AppBar_W ..[hidden] chat_TIMUIKitChat_customAppBar_W
+
+                (onDealWithGroupApplication\n顶部群未决列表widget点击事件相应) as TIMUIKitChat_onDealWithGroupApplication_P
+                rectangle "(String groupId)\n申请加群未决列表跳转匿名函数" as chat_TIMUIKitChat_onDealWithGroupApplication_W{
+                    (isWideScreen\n是否宽屏设备) as chat_onDealWithGroupApplication_isWideScreen_P
+                    stack "跳转至加群未决列表处理页面" as route_chat_2_group_application_list
+                    card "TUIKitWidePopup.showPopupWindow\n进群申请列表弹窗" as chat_TIMUIKitChat_showPopupWindow_U{
+                        component TIMUIKitGroupApplicationList\nUIKit层加群申请未决列表 as chat_TIMUIKitChat_TIMUIKitGroupApplicationList_W{
+                        }
+                    }
+                    chat_onDealWithGroupApplication_isWideScreen_P .left.> route_chat_2_group_application_list : false
+                    chat_onDealWithGroupApplication_isWideScreen_P .right.> chat_TIMUIKitChat_showPopupWindow_U : true
+                }
+                TIMUIKitChat_onDealWithGroupApplication_P .right. chat_TIMUIKitChat_onDealWithGroupApplication_W
+                TIMUIKitChat_onDealWithGroupApplication_P .right. chat_TIMUIKitChat_onDealWithGroupApplication_W
+
+                chat_TIMUIKitChat_customAppBar_W ...[hidden] chat_TIMUIKitChat_onDealWithGroupApplication_W
+
+                (messageItemBuilder\n消息类型解析构建item) as chat_TIMUIKitChat_messageItemBuilder_P
+                component MessageItemBuilder\n解析消息显示对应布局构建 as chat_TIMUIKitChat_MessageItemBuilder_W{
+                    rectangle "customMessageItemBuilder: (message, isShowJump, clearJump)\n自定义消息构建匿名函数" as chat_MessageItemBuilder_customMessageItemBuilder_M{
+                        component CustomMessageElem\n自定义消息widget as chat_MessageItemBuilder_CustomMessageElem_W {
+
+                        }
+                    }
+                    component "locationMessageItemBuilder: \n(message, isShowJump, clearJump)\n本地消息构建匿名widget" as chat_MessageItemBuilder_locationMessageItemBuilder_W{
+                    }
+
+                }
+                chat_TIMUIKitChat_messageItemBuilder_P .right. chat_TIMUIKitChat_MessageItemBuilder_W
+                chat_TIMUIKitChat_messageItemBuilder_P .right. chat_TIMUIKitChat_MessageItemBuilder_W
+
+                chat_TIMUIKitChat_onDealWithGroupApplication_W ..[hidden] chat_TIMUIKitChat_MessageItemBuilder_W
+            }
+        }
+    }
+}
+@enduml

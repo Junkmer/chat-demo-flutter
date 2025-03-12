@@ -1,0 +1,37 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+'属性初始化设置
+skinparam file {
+    FontColor #DarkGreen
+    BackgroundColor #GhostWhite
+}
+
+file chat-uikit-flutter/lib/ui/views/TIMUIKitChat/TIMUIKItMessageList/tim_uikit_history_message_list_container.dart as tim_uikit_chat_history_message_list_container_dart{
+    component "TIMUIKitHistoryMessageListSelector\n历史消息选择widget" as container_selector_W{
+        (builder) as selector_builder_P
+        rectangle "(context, messageList, child){}\n历史消息选择器匿名构建函数" as selector_builder_M{
+            component TIMUIKitHistoryMessageList\n历史消息列表widget as builder_messageList_W{
+                (itemBuilder\n消息Item构建参数) as messageList_itemBuilder_P
+                rectangle "(context, message){}\n历史消息子类item构建函数" as messageList_itemBuilder_M{
+                    component "TIMUIKitHistoryMessageListItem\n消息列表Item widget" as itemBuilder_listItem{
+                        (topRowBuilder\n顶部水平布局构建参数) as listItem_topRowBuilder_P
+                        rectangle "_getTopRowBuilder(TUIChatSeparateViewModel model){}" as listItem__getTopRowBuilder_M{
+                            card "widget.messageItemBuilder?.messageNickNameBuilder != null"{
+                                rectangle "(BuildContext context, V2TimMessage message) {}"{
+                                    [widget.messageItemBuilder!.messageNickNameBuilder!(context, message, model)\n外部传入的顶部用户昵称构建widget]
+                                }
+                            }
+                        }
+                        listItem_topRowBuilder_P .. listItem__getTopRowBuilder_M
+                        listItem_topRowBuilder_P .. listItem__getTopRowBuilder_M
+                    }
+                }
+                messageList_itemBuilder_P .. messageList_itemBuilder_M
+                messageList_itemBuilder_P .. messageList_itemBuilder_M
+            }
+        }
+        selector_builder_P .. selector_builder_M
+        selector_builder_P .. selector_builder_M
+    }
+}
+@enduml

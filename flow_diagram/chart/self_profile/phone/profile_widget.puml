@@ -1,0 +1,76 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+'属性初始化设置
+skinparam file {
+    FontColor #DarkGreen
+    BackgroundColor #GhostWhite
+}
+
+file lib/src/profile.dart as file_profile_dart{
+component MyProfile\n窄屏我的资料界面 as profile_MyProfile_W{
+    component TIMUIKitProfile\nUIKit最外层资料widget as profile_MyProfile_TIMUIKitProfile_W{
+        component TIMUIKitProfileUserInfoCard as profile_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_W{
+            usecase "defaultWidget\n默认布局" as profile_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_defaultWidget_W
+            [TIMUIKitProfileUserInfoCardNarrow\n用户资料窄屏布局] as profile_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCardNarrow_W
+            profile_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_defaultWidget_W .right. profile_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCardNarrow_W
+            profile_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_defaultWidget_W .right. profile_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCardNarrow_W
+
+            usecase "desktopWidget\n桌面端布局" as profile_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_desktopWidget_W
+            [TIMUIKitProfileUserInfoCardWide\n用户资料宽屏布局] as profile_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCardWide_W
+            profile_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_desktopWidget_W .right. profile_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCardWide_W
+            profile_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_desktopWidget_W .right. profile_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCardWide_W
+
+            profile_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_defaultWidget_W ..[hidden] profile_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_desktopWidget_W
+        }
+        stack MyProfileDetail\n跳转至我的详情页 as route_home_page_2_my_profile_detail_M{
+        }
+
+        profile_MyProfile_TIMUIKitProfile_TIMUIKitProfileUserInfoCard_W .right.> route_home_page_2_my_profile_detail_M :onTap
+
+        [TIMUIKitOperationItem\n加我为好友的方式] as profile_MyProfile_TIMUIKitProfile_addMe_W
+        rectangle showApplicationTypeSheet\n加我为好友选项设置函数 as profile_MyProfile_showApplicationTypeSheet_M{
+            component showAdaptiveActionSheet\n加我为好友选项弹窗 as showApplicationTypeSheet_showAdaptiveActionSheet_W{
+                [BottomSheetAction\n允许任何人] as showAdaptiveActionSheet_one_W
+                [BottomSheetAction\n需要验证信息] as showAdaptiveActionSheet_two_W
+                [BottomSheetAction\n禁止加我为好友] as showAdaptiveActionSheet_three_W
+                [CancelAction\n取消] as showAdaptiveActionSheet_cancel_W
+            }
+        }
+        profile_MyProfile_TIMUIKitProfile_addMe_W .> profile_MyProfile_showApplicationTypeSheet_M : onTap
+
+        [TIMUIKitOperationItem\n更换皮肤] as profile_MyProfile_TIMUIKitProfile_skin_W
+        stack MyProfileDetail\n跳转至皮肤更换页 as route_home_page_2_skin_page_M{
+        }
+        profile_MyProfile_TIMUIKitProfile_skin_W .> route_home_page_2_skin_page_M : onTap
+
+        [TIMUIKitOperationItem\n消息阅读状态] as profile_MyProfile_TIMUIKitProfile_read_W
+        [TIMUIKitOperationItem\n显示在线状态] as profile_MyProfile_TIMUIKitProfile_status_W
+
+        [TIMUIKitOperationItem\n关于腾讯云] as profile_MyProfile_TIMUIKitProfile_about_W
+        stack MyProfileDetail\n跳转至demo关于页面 as route_home_page_2_about_M{
+        }
+        profile_MyProfile_TIMUIKitProfile_about_W . route_home_page_2_about_M : onTap
+
+        [TIMUIKitOperationItem\n退出登录] as profile_MyProfile_TIMUIKitProfile_logout_W
+        rectangle _handleLogout\n退出登录 as profile_MyProfile__handleLogout_W{
+            card "Routes().directToLoginPage()" as _handleLogout_login_U{
+                 ("routes.pageType\n路由跳转类型") as routes_page_type_P
+                 card "InitStep.directToLogin()\n跳转至登录页" as routes_to_login_U
+                 card "InitStep.directToHomePage()\n跳转至首页" as routes_to_homePage_U
+
+                 routes_page_type_P .right.> routes_to_login_U : loginPage
+                 routes_page_type_P ..> routes_to_homePage_U : homePage
+            }
+        }
+        profile_MyProfile_TIMUIKitProfile_logout_W .> profile_MyProfile__handleLogout_W : onTap
+
+        route_home_page_2_my_profile_detail_M ...[hidden] profile_MyProfile_TIMUIKitProfile_addMe_W
+        profile_MyProfile_TIMUIKitProfile_addMe_W ...[hidden] profile_MyProfile_TIMUIKitProfile_skin_W
+        profile_MyProfile_TIMUIKitProfile_skin_W ..[hidden] profile_MyProfile_TIMUIKitProfile_read_W
+        profile_MyProfile_TIMUIKitProfile_read_W ..[hidden] profile_MyProfile_TIMUIKitProfile_status_W
+        profile_MyProfile_TIMUIKitProfile_status_W ..[hidden] profile_MyProfile_TIMUIKitProfile_about_W
+        profile_MyProfile_TIMUIKitProfile_about_W ..[hidden] profile_MyProfile_TIMUIKitProfile_logout_W
+    }
+}
+@enduml

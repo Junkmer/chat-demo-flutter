@@ -1,0 +1,66 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+component TIMUIKitConversation\nUIKIT层会话页 as home_page_TencentPage_Conversation_TIMUIKitConversation_W{
+    component MultiProvider\nTIMUIKitConversation最外层Widget as home_page_TencentPage_Conversation_TIMUIKitConversation_MultiProvider_W{
+        card TUIKitScreenUtils.getDeviceWidget\n获取设备类型 as home_page_MultiProvider_getDeviceWidget_U{
+            (defaultWidget\n默认手机端) as home_page_MultiProvider_defaultWidget_P
+            component SlidableAutoCloseBehavior\n避免同时打开多个侧滑菜单 as home_page_getDeviceWidget_SlidableAutoCloseBehavior_W{
+                component EasyRefresh\n下拉刷新会话列表 as home_page_SlidableAutoCloseBehavior_EasyRefresh_W{
+                    [CustomizeBallPulseHeader\n自定义顶部下拉刷新加载动画] as home_page_EasyRefresh_CustomizeBallPulseHeader_W
+                    component conversationList\n会话列表Widget as home_page_EasyRefresh_conversationList_W{
+                        component ListView.builder\n列表数据构建器 as home_page_conversationList_ListView.builder_W{
+                            card TUIKitScreenUtils.getDeviceWidget\n获取设备类型 as home_page_ListView.builder_getDeviceWidget_U{
+                                (defaultWidget\n默认手机端) as home_page_ListView.builder_defaultWidget_P
+                                component AutoScrollTag\n拥有滚动到特定索引位置的功能组件 as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag{
+                                    component Slidable\n支持列表Item增加侧滑功能 as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_Slidable{
+                                        component conversationLineItem\n会话Item最外层Widget as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_Slidable_conversationLineItem{
+                                            component TIMUIKitConversationItem\n会话item as defaultWidget_TIMUIKitConversationItem_W{
+                                                [Avatar\n会话Item头像] as home_page_TIMUIKitConversationItem_Avatar_W
+                                                [UnreadMessage\n会话Item未读数] as home_page_TIMUIKitConversationItem_UnreadMessage_W
+                                                [_getTimeStringForChatWidget\n会话Item时间] as home_page_TIMUIKitConversationItem__getTimeStringForChatWidget_W
+                                                component _getShowMsgWidget\n会话ItemLastMessage as home_page_TIMUIKitConversationItem__getShowMsgWidget_W{
+                                                   (是否需要显示草稿\n（这里有多个参数判断条件）) as home_page__getShowMsgWidget_isShowDraft_P
+                                                   component TIMUIKitDraftText\n草稿布局 as home_page__getShowMsgWidget_TIMUIKitDraftText_W{
+
+                                                   }
+                                                   component TIMUIKitLastMsg\n消息详情摘要 as home_page__getShowMsgWidget_TIMUIKitLastMsg_W{
+                                                        [Icon\n发送失败]
+                                                        [Icon\n发送中]
+                                                   }
+                                                   home_page__getShowMsgWidget_isShowDraft_P .left.> home_page__getShowMsgWidget_TIMUIKitDraftText_W : 是
+                                                   home_page__getShowMsgWidget_isShowDraft_P .right.> home_page__getShowMsgWidget_TIMUIKitLastMsg_W : 否
+                                                }
+                                                home_page_TIMUIKitConversationItem__getTimeStringForChatWidget_W ..[hidden] home_page_TIMUIKitConversationItem__getShowMsgWidget_W
+                                            }
+                                        }
+                                        component ActionPane\n定义Slidable组件在侧滑时展示动作按钮的区域和行为 as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane{
+                                            component slideChildren=_getSlideBuilder as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder{
+                                                component _defaultSlideBuilder\n默认的侧滑显示扩展功能 as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder{
+                                                    [ConversationItemSlidePanel\n清除] as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_clean
+                                                    [ConversationItemSlidePanel\n置顶/取消置顶] as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_pin
+                                                    [ConversationItemSlidePanel\n删除] as conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_delete
+
+                                                    conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_clean .[hidden] conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_pin
+                                                    conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_pin .[hidden] conversationList_getDeviceWidget_defaultWidget_AutoScrollTag_ActionPane__getSlideBuilder__defaultSlideBuilder_delete
+                                                }
+                                            }
+                                                                                                    }
+                                    }
+                                }
+
+                                home_page_ListView.builder_defaultWidget_P .right. conversationList_getDeviceWidget_defaultWidget_AutoScrollTag
+                                home_page_ListView.builder_defaultWidget_P .right. conversationList_getDeviceWidget_defaultWidget_AutoScrollTag
+                            }
+                        }
+                    }
+                    home_page_EasyRefresh_CustomizeBallPulseHeader_W ..[hidden] home_page_EasyRefresh_conversationList_W
+                }
+            }
+
+            home_page_MultiProvider_defaultWidget_P .right. home_page_getDeviceWidget_SlidableAutoCloseBehavior_W
+            home_page_MultiProvider_defaultWidget_P .right. home_page_getDeviceWidget_SlidableAutoCloseBehavior_W
+        }
+    }
+}
+@enduml
