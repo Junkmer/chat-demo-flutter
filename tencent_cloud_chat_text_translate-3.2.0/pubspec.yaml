@@ -15,7 +15,7 @@ dependencies:
   tencent_cloud_chat_intl: ^2.1.2
   tencent_cloud_chat_message: ^3.2.0
   tencent_cloud_chat_sdk: ^8.3.6498+4
-  extended_text: ^14.0.0
+  extended_text: ^15.0.0
 
 dev_dependencies:
   flutter_test:
