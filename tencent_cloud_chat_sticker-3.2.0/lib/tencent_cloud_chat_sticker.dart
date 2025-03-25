@@ -118,6 +118,7 @@ class TencentCloudChatStickerPlugin extends TencentCloudChatPlugin {
             rowNum: type == StickerDeviceScreenType.mobile ? 4 : 8,
             iconSize: 30,
             index: 1,
+            packageName: "tencent_cloud_chat_sticker",
           ),
         );
       }
@@ -140,6 +141,7 @@ class TencentCloudChatStickerPlugin extends TencentCloudChatPlugin {
             iconSize: 30,
             rowNum: type == StickerDeviceScreenType.mobile ? 4 : 8,
             index: 2,
+            packageName: "tencent_cloud_chat_sticker",
           ),
         );
       }
@@ -162,6 +164,7 @@ class TencentCloudChatStickerPlugin extends TencentCloudChatPlugin {
             iconSize: 30,
             rowNum: type == StickerDeviceScreenType.mobile ? 4 : 6,
             index: 3,
+            packageName: "tencent_cloud_chat_sticker",
           ),
         );
       }
@@ -183,6 +186,7 @@ class TencentCloudChatStickerPlugin extends TencentCloudChatPlugin {
             type: 0,
             rowNum: type == StickerDeviceScreenType.mobile ? 7 : 10,
             index: 0,
+            packageName: "tencent_cloud_chat_sticker",
           ),
         );
       }
@@ -287,7 +291,7 @@ class TencentCloudChatStickerPlugin extends TencentCloudChatPlugin {
               return Image(
                 image: AssetImage(
                   p.path,
-                  package: "tencent_cloud_chat_sticker",
+                  package: stickerStruct.packageName,
                 ),
                 width: 100,
               );

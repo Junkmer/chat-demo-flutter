@@ -145,7 +145,7 @@ class TencentCloudChatStickerTabState extends State<TencentCloudChatStickerTab> 
                   child: Align(
                     alignment: Alignment.center,
                     child: Image(
-                      image: AssetImage(e.iconPath, package: "tencent_cloud_chat_sticker"),
+                      image: AssetImage(e.iconPath, package: e.packageName),
                       width: e.iconSize,
                     ),
                   ),
@@ -194,12 +194,14 @@ class TencentCloudChatStickerContentState extends State<TencentCloudChatStickerC
     int crossAxisCount = 7;
     int stickerType = 0;
     int stickerIndex = 0;
+    String? packageName;
     if (TencentCloudChatStickerPlugin.initData.customStickerLists != null) {
       if (TencentCloudChatStickerPlugin.initData.customStickerLists!.elementAtOrNull(widget.activeTabIndex) != null) {
         currentStickerList = TencentCloudChatStickerPlugin.initData.customStickerLists![widget.activeTabIndex].stickers;
         crossAxisCount = TencentCloudChatStickerPlugin.initData.customStickerLists![widget.activeTabIndex].rowNum;
         stickerType = TencentCloudChatStickerPlugin.initData.customStickerLists![widget.activeTabIndex].type;
         stickerIndex = TencentCloudChatStickerPlugin.initData.customStickerLists![widget.activeTabIndex].index;
+        packageName = TencentCloudChatStickerPlugin.initData.customStickerLists![widget.activeTabIndex].packageName;
       }
     }
     return Expanded(
@@ -227,7 +229,7 @@ class TencentCloudChatStickerContentState extends State<TencentCloudChatStickerC
                         );
                       },
                       child: Image(
-                        image: AssetImage(e.path, package: "tencent_cloud_chat_sticker"),
+                        image: AssetImage(e.path, package: packageName),
                       ),
                     ),
                   )
