@@ -66,6 +66,24 @@ dependencies:
   wakelock_plus: 1.1.4
   fluttertoast: ">=8.0.0 <8.6.0"
 
+dependency_overrides:
+  tencent_cloud_chat_common:
+    path: tencent_cloud_chat_common-3.2.0+1
+  tencent_cloud_chat_conversation:
+    path: tencent_cloud_chat_conversation-3.2.0
+  tencent_cloud_chat_message:
+    path: tencent_cloud_chat_message-3.2.0
+  tencent_cloud_chat_contact:
+    path: tencent_cloud_chat_contact-3.2.0+1
+  tencent_cloud_chat_sticker:
+    path: tencent_cloud_chat_sticker-3.2.0
+  tencent_cloud_chat_message_reaction:
+    path: tencent_cloud_chat_message_reaction-3.2.0+1
+  tencent_cloud_chat_text_translate:
+    path: tencent_cloud_chat_text_translate-3.2.0
+  tencent_cloud_chat_sound_to_text:
+    path: tencent_cloud_chat_sound_to_text-3.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
